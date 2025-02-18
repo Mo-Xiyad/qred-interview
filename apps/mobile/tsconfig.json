@@ -2,16 +2,38 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@qred/api": [
+        "../../packages/api/index"
+      ],
+      "tailwind.config": [
+        "./tailwind.config.ts"
       ]
-    }
+    },
+    "jsx": "react-native",
+    "types": [
+      "nativewind/types"
+    ],
+    "checkJs": false,
+    "moduleSuffixes": [
+      ".ios",
+      ".android",
+      ".native",
+      ""
+    ]
   },
+  "exclude": [
+    "node_modules"
+  ],
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "nativewind-env.d.ts"
   ]
 }

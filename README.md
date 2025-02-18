@@ -1,14 +1,15 @@
-# Turborepo starter
+# Qred Backend
 
-This Turborepo starter is maintained by the Turborepo core team.
+A TypeScript-based backend service using tRPC, Prisma, and Express.
 
-## Using this example
+## Tech Stack
 
-Run the following command:
-
-```sh
-npx create-turbo@latest
-```
+- **Framework**: Express.js with tRPC
+- **Database**: PostgreSQL with Prisma ORM
+- **Caching**: Redis
+- **Language**: TypeScript
+- **Testing**: Jest
+- **Development**: tsx
 
 ## What's inside?
 
@@ -16,69 +17,79 @@ This Turborepo includes the following packages/apps:
 
 ### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `mobile`: an expo app that runs the api endpoints from the backend
+- `backend`: a simple express server that serves a few api endpoints and uses [tRPC](https://trpc.io) for type-safe communication between the frontend and backend
+- `shared`: a shared package that contains types and utilities that are used by both the frontend and backend
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+## Getting Started
 
-### Utilities
+1. **Install dependencies**
 
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
+```bash
+pnpm install
 ```
-cd my-turborepo
+
+2. **Set up environment variables**
+   Create a `.env` file in the `apps/backend/src/config` directory and add those environment variables.
+
+3. **build backend**
+
+```bash
 pnpm build
 ```
 
-### Develop
+4. **run generate to generate the prisma client**
 
-To develop all apps and packages, run the following command:
-
+```bash
+pnpm db:generate
 ```
-cd my-turborepo
+
+5. **Run database migrations**
+
+```bash
+pnpm db:migrate
+```
+
+6. **Run the backend**
+
+```bash
 pnpm dev
 ```
 
-### Remote Caching
+7. **Run the mobile app**
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+```bash
+cd apps/mobile
+pnpm dev
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## API Routes
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+### Card Routes
 
+- `card.getCardsById` - Get cards by company and user ID
+- `card.getCardSpendingDetails` - Get card spending details
+- `card.getCardTransactions` - Get card transactions
+
+### Company Routes
+
+- `company.companyList` - Get all companies
+- `company.getCompanyById` - Get company by ID
+
+### Invoice Routes
+
+- `invoice.invoiceList` - Get all invoices
+- `invoice.getInvoice` - Get invoice by ID
+- `invoice.getDueInvoices` - Get due invoices
+
+## Testing
+
+The project uses Jest for testing. Tests are located in the `src/__tests__` directory.
+
+To run tests:
+
+```bash
+pnpm test
 ```
-npx turbo link
-```
 
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+**make sure that getBaseUrl in apps/mobile/src/utils/api.ts is set to the correct url of the backend server.**
