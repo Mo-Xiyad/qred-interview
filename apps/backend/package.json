@@ -4,8 +4,13 @@
   "main": "server.js",
   "scripts": {
     "dev": "ts-node src/server.ts",
-    "start": "ts-node src/server.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "serve": "node dist/server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "keywords": [],
   "author": "",
@@ -13,21 +18,28 @@
   "type": "commonjs",
   "description": "",
   "dependencies": {
+    "@prisma/client": "^6.3.1",
+    "@trpc/server": "catalog:",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-rate-limit": "^7.5.0",
     "ioredis": "^5.5.0",
+    "jest-mock-extended": "4.0.0-beta1",
     "rate-limit-redis": "^4.2.0",
-    "superjson": "^2.2.2",
+    "superjson": "catalog:",
     "winston": "^3.17.0",
-    "zod": "^3.24.2"
+    "zod": "catalog:"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.12",
     "@types/node": "^22.13.4",
+    "jest": "^29.2.1",
+    "prisma": "^6.3.1",
+    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "@repo/typescript-config": "workspace:*"
   }

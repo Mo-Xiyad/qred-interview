@@ -1,39 +1,23 @@
-import * as trpc from '@trpc/server';
-import { initTRPC } from '@trpc/server';
+import { PrismaClient } from '@prisma/client';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import cors from 'cors';
-import express from 'express';
-import { z } from 'zod';
+import express, { ErrorRequestHandler } from 'express';
+import { config } from './config/env';
+import { RouterFactory } from './factories/router.factory';
+import { errorHandler } from './middleware/error-handler';
+import { requestLogger } from './middleware/logger';
+import { rateLimiter } from './middleware/rate-limiter';
+import healthRouter from './routers/health';
+
+const prisma = new PrismaClient();
+const appRouter = RouterFactory.create(prisma);
 
 const app = express();
 
-const corsOrigin = process.env.CORS_ORIGIN || 'http://localhost:3000';
-
-const t = initTRPC.create();
-
-export const router = t.router;
-const appRouter = router({
-  getUser: t.procedure.input(z.number()).query(async ({ input }) => {
-    return {
-      id: input,
-      name: 'John Doe'
-    };
-  })
-});
-
-const createContext = ({
-  req,
-  res
-}: trpcExpress.CreateExpressContextOptions) => ({}); // no context
-type Context = trpc.inferAsyncReturnType<typeof createContext>;
-
-const config = {
-  port: process.env.PORT || 4000
-};
-
+// Security middleware
 app.use(
   cors({
-    origin: corsOrigin,
+    origin: config.cors.origin,
     methods: ['GET', 'POST'],
     credentials: true
   })
@@ -42,15 +26,32 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Logging and rate limiting
+app.use(requestLogger);
+app.use(rateLimiter);
+
+app.use('/health', healthRouter);
+
 // TRPC routes
 app.use(
   '/trpc',
   trpcExpress.createExpressMiddleware({
     router: appRouter,
-    createContext
+    // TODO: add user to context
+    onError: ({ error }) => {
+      console.error('TRPC error:', error);
+      return {
+        message: error.message,
+        code: 'INTERNAL_SERVER_ERROR'
+      };
+    }
   })
 );
 
+app.use(errorHandler as ErrorRequestHandler);
+
 app.listen(config.port as number, '0.0.0.0', () => {
-  console.log(`📍 Backend http://localhost:${config.port}`);
+  console.log(`📍 Backned http://localhost:${config.port}`);
 });
+
+export type { AppRouter } from './routers';
