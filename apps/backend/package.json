@@ -1,9 +1,10 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "dev": "ts-node src/server.ts",
+    "start": "ts-node src/server.ts",
     "build": "tsc"
   },
   "keywords": [],
