@@ -24,7 +24,6 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-rate-limit": "^7.5.0",
-    "ioredis": "^5.6.0",
     "jest-mock-extended": "4.0.0-beta1",
     "rate-limit-redis": "^4.2.0",
     "redis": "^4.7.0",
