@@ -8,8 +8,8 @@ export class CacheService {
   constructor() {
     this.redis = new Redis({
       host: config.redis.host,
-      port: config.redis.port as number
-      // password: config.redis.password
+      port: config.redis.port as number,
+      password: config.redis.password
     });
   }
 
