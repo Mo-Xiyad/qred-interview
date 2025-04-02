@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 export const config = {
   port: process.env.PORT || 4001,
   nodeEnv: process.env.NODE_ENV || 'development',
@@ -7,7 +10,7 @@ export const config = {
   },
   redis: {
     host: process.env.REDIS_HOST || 'localhost',
-    port: process.env.REDIS_PORT || 6379,
+    port: Number(process.env.REDIS_PORT) || 6379,
     password: process.env.REDIS_PASSWORD || ''
   }
 };

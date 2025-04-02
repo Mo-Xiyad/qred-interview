@@ -6,7 +6,7 @@ import { InvoiceService } from '../services/invoice.service';
 export class InvoiceFactory {
   static create(prisma: PrismaClient) {
     const repository = new InvoiceRepository(prisma);
-    const cacheService = new CacheService();
+    const cacheService = CacheService.getInstance();
     return new InvoiceService(repository, cacheService);
   }
 }

@@ -3,7 +3,7 @@ import { CacheService } from '../services/cache.service';
 import { prisma } from '../utils/prisma';
 
 const router = express.Router();
-const cacheService = new CacheService();
+const cacheService = CacheService.getInstance();
 
 router.get('/', async (req, res) => {
   try {

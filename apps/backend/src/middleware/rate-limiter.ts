@@ -1,17 +1,16 @@
 import rateLimit from 'express-rate-limit';
-import Redis from 'ioredis';
-import RedisStore, { RedisReply } from 'rate-limit-redis';
-import { config } from '../config/env';
+import RedisStore from 'rate-limit-redis';
+import { CacheService } from '../services/cache.service';
 
-const redis = new Redis({
-  host: config.redis.host,
-  port: config.redis.port as number
-});
-
+CacheService.getInstance();
 export const rateLimiter = rateLimit({
   store: new RedisStore({
-    sendCommand: (command: string, ...args: string[]) =>
-      redis.call(command, ...args) as Promise<RedisReply>
+    sendCommand: (...args: string[]) => {
+      if (!CacheService.client) {
+        throw new Error('Redis client not initialized');
+      }
+      return CacheService.client.sendCommand(args);
+    }
   }),
   windowMs: 15 * 60 * 1000,
   max: 100,

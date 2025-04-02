@@ -6,7 +6,7 @@ import { CardService } from '../services/card.service';
 export class CardFactory {
   static create(prisma: PrismaClient) {
     const repository = new CardRepository(prisma);
-    const cacheService = new CacheService();
+    const cacheService = CacheService.getInstance();
     return new CardService(repository, cacheService);
   }
 }

@@ -5,6 +5,7 @@ import { CompanyService } from '../services/company.service';
 export class CompanyFactory {
   static create(prisma: PrismaClient) {
     const repository = new CompanyRepository(prisma);
-    return new CompanyService(repository, new CacheService());
+    const cacheService = CacheService.getInstance();
+    return new CompanyService(repository, cacheService);
   }
 }
