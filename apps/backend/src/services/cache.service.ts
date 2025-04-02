@@ -6,11 +6,14 @@ export class CacheService {
   private defaultTTL: number = 3600; // 1 hour
 
   constructor() {
-    this.redis = new Redis({
-      host: config.redis.host,
-      port: parseInt(config.redis.port as string, 10),
-      password: config.redis.password
-    });
+    // this.redis = new Redis({
+    //   host: config.redis.host,
+    //   port: parseInt(config.redis.port as string, 10),
+    //   password: config.redis.password
+    // });
+    this.redis = new Redis(
+      `redis://:${config.redis.password}@${config.redis.host}:${config.redis.port}`
+    );
   }
 
   async get<T>(key: string): Promise<T | null> {
